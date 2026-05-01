@@ -1,167 +1,191 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, memo, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 import logoUrl from '../../assets/images/logodyl.png';
+import styles from './Navbar.module.css';
 
-const Navbar = () => {
+const navLinks = [
+  { path: '/', label: 'Inicio' },
+  { path: '/catalogo', label: 'Catálogo' },
+  { path: '/about', label: 'Nosotros' },
+  { path: '/soporte', label: 'Soporte' },
+];
+
+const Navbar = memo(function Navbar() {
   const { getCartCount, toggleCart } = useCart();
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+  const handleScroll = useCallback(function handleScrollEvent() {
+    setScrolled(window.scrollY > 50);
   }, []);
 
+  useEffect(function attachScrollListener() {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return function removeScrollListener() {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll]);
+
+  // Close mobile menu on route change
+  useEffect(function closeMobileOnNav() {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  const cartCount = getCartCount();
+
+  const isActive = (path) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
+  };
+
   return (
-    <nav className={scrolled ? 'glass-dark' : ''} style={{
-      ...styles.nav,
-      backgroundColor: scrolled ? 'rgba(5, 5, 5, 0.95)' : 'transparent',
-      borderBottom: scrolled ? '1px solid var(--color-border)' : '1px solid transparent'
-    }}>
-      <div style={styles.container}>
-        
-        {/* Logo */}
-        <Link to="/" style={styles.logoContainer}>
-          <img 
-            src={logoUrl} 
-            alt="DYL Importaciones" 
-            style={styles.logoImage} 
-            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
-          />
-          <span style={{...styles.logoFallback, display: 'none'}}>DYL <span className="text-accent">IMPORTS</span></span>
-        </Link>
+    <>
+      {/* Scroll progress bar */}
+      <motion.div
+        className={styles.progressBar}
+        style={{ scaleX }}
+      />
 
-        {/* Navigation Links */}
-        <div style={styles.navLinks}>
-          <Link to="/" style={{...styles.link, color: location.pathname === '/' ? 'var(--color-primary)' : 'var(--color-white)'}}>Inicio</Link>
-          <Link to="/catalogo" style={{...styles.link, color: location.pathname === '/catalogo' ? 'var(--color-primary)' : 'var(--color-white)'}}>Catálogo</Link>
-          <Link to="/about" style={{...styles.link, color: location.pathname === '/about' ? 'var(--color-primary)' : 'var(--color-white)'}}>Nosotros</Link>
-        </div>
+      <nav className={`${styles.nav} ${scrolled ? styles.navScrolled : ''}`}>
+        <div className={styles.container}>
+          {/* Logo */}
+          <Link to="/" className={styles.logoLink} aria-label="DYL Importaciones - Inicio">
+            <img src={logoUrl} alt="DYL" className={styles.logo} />
+          </Link>
 
-        {/* Actions */}
-        <div style={styles.actions}>
-          <div style={styles.authGroup}>
-            <Link to="/login" style={styles.authLink}>Entrar</Link>
-            <span style={styles.separator}>|</span>
-            <Link to="/register" style={styles.authLink}>Registro</Link>
+          {/* Desktop Links */}
+          <div className={styles.navLinks} role="navigation" aria-label="Navegación principal">
+            {navLinks.map(({ path, label }) => (
+              <Link
+                key={path}
+                to={path}
+                className={`${styles.link} ${isActive(path) ? styles.linkActive : ''}`}
+              >
+                {label}
+                {isActive(path) && (
+                  <motion.span
+                    layoutId="nav-indicator"
+                    className={styles.linkIndicator}
+                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  />
+                )}
+              </Link>
+            ))}
           </div>
-          
-          <button style={styles.cartBtn} onClick={toggleCart} aria-label="Bolsa de compras">
-            <i className="bi bi-bag-fill" style={styles.cartIcon}></i>
-            {getCartCount() > 0 && (
-              <span style={styles.cartBadge}>{getCartCount()}</span>
-            )}
-          </button>
+
+          {/* Actions */}
+          <div className={styles.actions}>
+            <Link to="/login" className={styles.authLink} id="navbar-login-btn">
+              <i className="bi bi-person" aria-hidden="true" />
+              <span className={styles.authLabel}>Entrar</span>
+            </Link>
+
+            <Link to="/register" className={styles.registerLink} id="navbar-register-btn">
+              <i className="bi bi-person-plus" aria-hidden="true" />
+              <span className={styles.authLabel}>Registro</span>
+            </Link>
+
+            <button
+              id="navbar-cart-btn"
+              onClick={toggleCart}
+              className={styles.cartBtn}
+              aria-label={`Carrito de compras${cartCount > 0 ? `, ${cartCount} items` : ''}`}
+            >
+              <i className={`bi bi-bag ${styles.cartIcon}`} aria-hidden="true" />
+              <AnimatePresence>
+                {cartCount > 0 && (
+                  <motion.span
+                    key="badge"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    className={styles.cartBadge}
+                    aria-hidden="true"
+                  >
+                    {cartCount}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+
+            {/* Hamburger */}
+            <button
+              id="navbar-menu-btn"
+              onClick={() => setMobileOpen(o => !o)}
+              className={styles.hamburger}
+              aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+              aria-expanded={mobileOpen}
+            >
+              <span className={`${styles.bar} ${mobileOpen ? styles.barTopOpen : ''}`} />
+              <span className={`${styles.bar} ${mobileOpen ? styles.barMidOpen : ''}`} />
+              <span className={`${styles.bar} ${mobileOpen ? styles.barBotOpen : ''}`} />
+            </button>
+          </div>
         </div>
 
-      </div>
-    </nav>
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              id="mobile-nav-menu"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className={styles.mobileMenu}
+            >
+              <div className={styles.mobileMenuInner}>
+                {navLinks.map(({ path, label }, i) => (
+                  <motion.div
+                    key={path}
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: i * 0.07, duration: 0.3 }}
+                  >
+                    <Link
+                      to={path}
+                      className={`${styles.mobileLink} ${isActive(path) ? styles.mobileLinkActive : ''}`}
+                    >
+                      {label}
+                    </Link>
+                  </motion.div>
+                ))}
+                <motion.div
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: navLinks.length * 0.07, duration: 0.3 }}
+                  className={styles.mobileDivider}
+                />
+                <motion.div
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: (navLinks.length + 1) * 0.07, duration: 0.3 }}
+                >
+                  <Link to="/login" className={styles.mobileLink}>
+                    <i className="bi bi-person" /> Entrar
+                  </Link>
+                </motion.div>
+                <motion.div
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: (navLinks.length + 2) * 0.07, duration: 0.3 }}
+                >
+                  <Link to="/register" className={`${styles.mobileLink} ${styles.mobileLinkRegister}`}>
+                    <i className="bi bi-person-plus" /> Registro
+                  </Link>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
+    </>
   );
-};
-
-const styles = {
-  nav: {
-    color: 'var(--color-white)',
-    padding: '1rem 0',
-    position: 'fixed',
-    top: 0,
-    width: '100%',
-    zIndex: 1000,
-    transition: 'all var(--transition-fast)'
-  },
-  container: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '0 2rem',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  logoContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    textDecoration: 'none',
-    color: 'var(--color-white)'
-  },
-  logoImage: {
-    height: '80px',
-    objectFit: 'contain',
-    filter: 'drop-shadow(0 0 5px rgba(255,255,255,0.2))'
-  },
-  logoFallback: {
-    fontSize: '1.8rem',
-    fontWeight: '900',
-    fontFamily: 'var(--font-family-heading)',
-    letterSpacing: '2px'
-  },
-  navLinks: {
-    display: 'flex',
-    gap: '2.5rem'
-  },
-  link: {
-    fontWeight: '700',
-    fontSize: '0.9rem',
-    textTransform: 'uppercase',
-    letterSpacing: '2px',
-    fontFamily: 'var(--font-family-heading)',
-    transition: 'color var(--transition-fast)'
-  },
-  actions: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '2rem'
-  },
-  authGroup: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.8rem'
-  },
-  authLink: {
-    color: 'var(--color-white)',
-    fontSize: '0.85rem',
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    transition: 'color var(--transition-fast)'
-  },
-  separator: {
-    color: 'rgba(255,255,255,0.2)',
-    fontSize: '0.9rem'
-  },
-  cartBtn: {
-    color: 'var(--color-white)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    padding: '0.5rem',
-    transition: 'transform 0.2s ease'
-  },
-  cartIcon: {
-    fontSize: '1.5rem'
-  },
-  cartBadge: {
-    position: 'absolute',
-    top: '0',
-    right: '0',
-    backgroundColor: 'var(--color-primary)',
-    color: 'var(--color-white)',
-    fontSize: '0.75rem',
-    fontWeight: '800',
-    width: '20px',
-    height: '20px',
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: '0 2px 4px rgba(230,25,43,0.4)',
-    transform: 'translate(25%, -25%)'
-  }
-};
+});
 
 export default Navbar;

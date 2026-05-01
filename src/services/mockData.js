@@ -85,8 +85,8 @@ export const mockProducts = [
     name: "Jordan 11 Retro Bred",
     price: 1800000,
     category: "Jordan",
-    description: "Charol brillante, suela roja. Las favoritas de MJ.",
-    image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Charol brillante, suela roja. Las favoritas de MJ.",
+    image: "/products/prod_10_ai.png",
     isNew: true
   },
   {
@@ -94,8 +94,8 @@ export const mockProducts = [
     name: "Hoodie Essential Black/Red",
     price: 350000,
     category: "Ropa",
-    description: "Sudadera de algodón premium de alto gramaje.",
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Sudadera de algodón premium de alto gramaje.",
+    image: "/products/prod_11_ai.png",
     isNew: true
   },
   {
@@ -103,8 +103,8 @@ export const mockProducts = [
     name: "Varsity Jacket DYL Exclusive",
     price: 650000,
     category: "Ropa",
-    description: "Chaqueta tipo universitario, mangas de cuero.",
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Chaqueta tipo universitario, mangas de cuero rojo.",
+    image: "/products/prod_12_ai.png",
     isNew: false
   },
   {
@@ -112,8 +112,8 @@ export const mockProducts = [
     name: "Cargo Pants Tactical Black",
     price: 280000,
     category: "Ropa",
-    description: "Pantalones de paracaidista ajustables.",
-    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Pantalones de paracaidista ajustables con múltiples bolsillos.",
+    image: "/products/prod_13_ai.png",
     isNew: false
   },
   {
@@ -121,8 +121,8 @@ export const mockProducts = [
     name: "Gorras New Era Chicago Bulls",
     price: 150000,
     category: "Accesorios",
-    description: "El toque final para el outfit rojo y negro definitivo.",
-    image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. El toque final para el outfit rojo y negro definitivo.",
+    image: "/products/prod_14_ai.png",
     isNew: true
   },
   {
@@ -130,8 +130,8 @@ export const mockProducts = [
     name: "DYL Duffle Bag Leather",
     price: 450000,
     category: "Accesorios",
-    description: "Maleta de viaje premium. Lleva tu colección con estilo.",
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Maleta de viaje en cuero negro premium. Lleva tu colección con estilo.",
+    image: "/products/prod_15_ai.png",
     isNew: true
   },
   {
@@ -139,8 +139,8 @@ export const mockProducts = [
     name: "Nike Air Force 1 '07 White",
     price: 650000,
     category: "Nike",
-    description: "El clásico indiscutible. Blanco inmaculado, perfecto para cualquier ocasión.",
-    image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. El clásico indiscutible. Blanco inmaculado, perfecto para cualquier ocasión.",
+    image: "/products/prod_16_ai.png",
     isNew: false
   },
   {
@@ -148,8 +148,8 @@ export const mockProducts = [
     name: "Jordan 3 Retro Black Cement",
     price: 1550000,
     category: "Jordan",
-    description: "Elephant print y cuero negro. Un grial del streetwear.",
-    image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Elephant print y cuero negro. Un grial del streetwear.",
+    image: "/products/prod_17_ai.png",
     isNew: true
   },
   {
@@ -157,8 +157,8 @@ export const mockProducts = [
     name: "Yeezy Slide Onyx",
     price: 450000,
     category: "Yeezy",
-    description: "Comodidad suprema en un diseño minimalista y oscuro.",
-    image: "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Comodidad suprema en un diseño minimalista y oscuro.",
+    image: "/products/prod_18_ai.png",
     isNew: false
   },
   {
@@ -166,8 +166,8 @@ export const mockProducts = [
     name: "New Balance 2002R Protection Pack",
     price: 950000,
     category: "New Balance",
-    description: "Capas deconstruidas. La estética de lo imperfecto.",
-    image: "https://images.unsplash.com/photo-1668875323281-9b626e95c1f0?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Capas deconstruidas. La estética de lo imperfecto.",
+    image: "/products/prod_19_ai.png",
     isNew: true
   },
   {
@@ -175,8 +175,8 @@ export const mockProducts = [
     name: "Nike Blazer Mid '77 Vintage",
     price: 550000,
     category: "Nike",
-    description: "Estética retro de los años 70. Sencillas y elegantes.",
-    image: "https://images.unsplash.com/photo-1552346154-21d32810baa3?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Estética retro de los años 70. Sencillas y elegantes.",
+    image: "/products/prod_20_ai.png",
     isNew: false
   },
   {
@@ -184,8 +184,8 @@ export const mockProducts = [
     name: "Camiseta DYL Oversize Logo",
     price: 180000,
     category: "Ropa",
-    description: "Algodón pesado, corte relajado y nuestro logo en rojo vibrante.",
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Algodón pesado, corte relajado y nuestro logo en rojo vibrante.",
+    image: "/products/prod_21_ai.png",
     isNew: true
   },
   {
@@ -193,8 +193,8 @@ export const mockProducts = [
     name: "Pantalón de Sudoración Gris",
     price: 220000,
     category: "Ropa",
-    description: "Comodidad extrema para el día a día o el gimnasio.",
-    image: "https://images.unsplash.com/photo-1584865288642-42078afe6942?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Comodidad extrema para el día a día o el gimnasio.",
+    image: "/products/prod_22_ai.png",
     isNew: false
   },
   {
@@ -202,8 +202,8 @@ export const mockProducts = [
     name: "Chaqueta Puffer Black Edition",
     price: 550000,
     category: "Ropa",
-    description: "Abrigo acolchado. Máxima protección contra el frío con estilo.",
-    image: "https://images.unsplash.com/photo-1551489186-ccb95a1ea6a3?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Abrigo acolchado. Máxima protección contra el frío con estilo.",
+    image: "/products/prod_23_ai.png",
     isNew: true
   },
   {
@@ -211,8 +211,8 @@ export const mockProducts = [
     name: "Calcetines Nike Everyday (Pack 3)",
     price: 90000,
     category: "Accesorios",
-    description: "El clásico que no puede faltar con tus sneakers nuevos.",
-    image: "https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. El clásico que no puede faltar con tus sneakers nuevos.",
+    image: "/products/prod_24_ai.png",
     isNew: false
   },
   {
@@ -220,8 +220,8 @@ export const mockProducts = [
     name: "Jordan 1 Mid Banned",
     price: 850000,
     category: "Jordan",
-    description: "Los colores de la rebeldía original. Rojo y negro puro.",
-    image: "https://images.unsplash.com/photo-1593081891731-fda0877988da?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Los colores de la rebeldía original. Rojo y negro puro.",
+    image: "/products/prod_25_ai.png",
     isNew: false
   },
   {
@@ -229,8 +229,8 @@ export const mockProducts = [
     name: "Nike SB Dunk Low Pro",
     price: 1100000,
     category: "Nike",
-    description: "Listos para el skate, listos para la calle. Lengüeta gruesa legendaria.",
-    image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=1000&q=100",
+    description: "Generado por IA. Listos para el skate, listos para la calle. Lengüeta gruesa legendaria.",
+    image: "/products/prod_26_ai.png",
     isNew: true
   },
   {

@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "frontend-engineer": {
+      "source": "siviter-xyz/dot-agent",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-engineer/SKILL.md",
+      "computedHash": "358d04a0397446940d48ff3132c32ed8407b818d3c7a85b1cd130abb62ed66f2"
+    },
+    "frontend-react-best-practices": {
+      "source": "sergiodxa/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-react-best-practices/SKILL.md",
+      "computedHash": "d79af29866e2c8cac7285743a3b049a92124bb0e466a43f71a136a614b78085f"
+    }
+  }
+}

@@ -1,0 +1,281 @@
+/* Navbar.module.css */
+
+.progressBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--red-500), var(--red-400));
+  z-index: 9999;
+  transform-origin: 0%;
+  box-shadow: 0 0 10px var(--red-glow);
+}
+
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 0;
+  transition:
+    background-color 0.4s var(--ease-out-expo),
+    border-color 0.4s var(--ease-out-expo),
+    backdrop-filter 0.4s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.navScrolled {
+  background-color: rgba(8, 8, 8, 0.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-8);
+  height: var(--navbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+/* ── Logo ── */
+.logoLink {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logo {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 10px var(--red-glow-strong));
+  transform: scale(1.04);
+}
+
+/* ── Desktop Nav Links ── */
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  flex: 1;
+  justify-content: center;
+}
+
+.link {
+  position: relative;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray-300);
+  padding: 0.3rem 0;
+  transition: color var(--duration-base) ease;
+}
+
+.link:hover { color: var(--white); }
+
+.linkActive { color: var(--white); }
+
+.linkIndicator {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: var(--red-500);
+  box-shadow: 0 0 6px var(--red-glow-strong);
+  border-radius: var(--radius-full);
+}
+
+/* ── Actions ── */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex-shrink: 0;
+}
+
+.authLink {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray-300);
+  transition: color var(--duration-base) ease;
+}
+
+.authLink:hover { color: var(--white); }
+
+/* ── Register Link (pill button) ── */
+.registerLink {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--red-400);
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-full);
+  background: rgba(230, 25, 43, 0.07);
+  transition:
+    background var(--duration-base) ease,
+    color var(--duration-base) ease,
+    box-shadow var(--duration-base) ease;
+}
+
+.registerLink:hover {
+  background: rgba(230, 25, 43, 0.18);
+  color: var(--white);
+  box-shadow: 0 0 16px var(--red-glow);
+}
+
+.authLabel {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .authLabel { display: inline; }
+}
+
+/* ── Cart Button ── */
+.cartBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  color: var(--gray-300);
+  transition: color var(--duration-base) ease;
+  font-size: 1.35rem;
+}
+
+.cartIcon { font-size: 1.35rem; }
+
+.cartBtn:hover { color: var(--white); }
+
+.cartBadge {
+  position: absolute;
+  top: -5px;
+  right: -7px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: var(--red-500);
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 800;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px var(--red-glow);
+  font-family: var(--font-body);
+}
+
+/* ── Hamburger ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  padding: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.bar {
+  width: 22px;
+  height: 1.5px;
+  background: var(--gray-200);
+  border-radius: var(--radius-full);
+  transition:
+    transform 0.35s var(--ease-out-expo),
+    opacity 0.25s ease;
+  display: block;
+}
+
+.barTopOpen {
+  transform: translateY(6.5px) rotate(45deg);
+}
+
+.barMidOpen {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.barBotOpen {
+  transform: translateY(-6.5px) rotate(-45deg);
+}
+
+/* ── Mobile Menu ── */
+.mobileMenu {
+  overflow: hidden;
+  background: rgba(8, 8, 8, 0.97);
+  backdrop-filter: blur(24px);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.mobileMenuInner {
+  padding: var(--space-5) var(--space-8) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.mobileLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  letter-spacing: 0.03em;
+  color: var(--gray-300);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: color var(--duration-fast) ease;
+}
+
+.mobileLink:hover,
+.mobileLinkActive { color: var(--white); }
+
+.mobileLinkActive { color: var(--red-500); }
+
+.mobileLinkRegister { color: var(--red-400) !important; }
+
+.mobileDivider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: var(--space-2) 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .navLinks { display: none; }
+  .hamburger { display: flex; }
+  .authLink .authLabel { display: none; }
+}
+
+@media (min-width: 769px) {
+  .mobileMenu { display: none !important; }
+}

@@ -1,175 +1,323 @@
-import React from 'react';
+import { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import logoUrl from '../../assets/images/logodyl.png';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPass, setShowPass] = useState(false);
+  const [remember, setRemember] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = useCallback(async function submitLogin(e) {
     e.preventDefault();
+    setError('');
+    setIsLoading(true);
+    await new Promise(r => setTimeout(r, 1400));
+    setIsLoading(false);
     navigate('/');
-  };
+  }, [navigate]);
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      style={styles.page}
+      transition={{ duration: 0.4 }}
+      style={s.page}
     >
-      {/* Elemento decorativo de fondo */}
-      <div style={styles.glowCircle}></div>
+      {/* Background glow */}
+      <div style={s.bgGlow} aria-hidden="true" />
 
-      <motion.div 
-        initial={{ scale: 0.95, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, type: 'spring', damping: 20 }}
-        style={styles.container}
+      <motion.div
+        initial={{ y: 30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.15, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        style={s.card}
         className="glass-panel"
       >
-        <div style={styles.header}>
-          <img src="/src/assets/images/logodyl.png" alt="DYL" style={styles.logo} />
-          <h2 style={styles.title}>INICIAR <span className="text-accent">SESIÓN</span></h2>
-          <p style={styles.subtitle}>Tu colección privada te espera.</p>
+        {/* Logo */}
+        <div style={s.logoWrapper}>
+          <Link to="/" aria-label="Volver al inicio">
+            <img src={logoUrl} alt="DYL" style={s.logo} />
+          </Link>
         </div>
 
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <div className="form-group floating-input-group">
-            <input type="email" id="email" className="form-control floating-input" required placeholder=" " />
-            <label className="floating-label" htmlFor="email">Correo Electrónico</label>
+        {/* Heading */}
+        <div style={s.heading}>
+          <h1 style={s.title}>BIENVENIDO</h1>
+          <p style={s.subtitle}>Ingresa a tu cuenta exclusiva</p>
+        </div>
+
+        {/* Error */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={s.errorBox}
+            role="alert"
+          >
+            <i className="bi bi-exclamation-triangle" /> {error}
+          </motion.div>
+        )}
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} style={s.form} noValidate>
+          {/* Email */}
+          <div className="field">
+            <label htmlFor="login-email" className="field-label">Email</label>
+            <div className="input-group">
+              <i className="bi bi-envelope input-icon" aria-hidden="true" />
+              <input
+                id="login-email"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="tu@email.com"
+                className="input"
+                required
+                autoComplete="email"
+              />
+            </div>
           </div>
 
-          <div className="form-group floating-input-group">
-            <input type="password" id="password" className="form-control floating-input" required placeholder=" " />
-            <label className="floating-label" htmlFor="password">Contraseña</label>
+          {/* Password */}
+          <div className="field">
+            <label htmlFor="login-password" className="field-label">Contraseña</label>
+            <div className="input-group">
+              <i className="bi bi-lock input-icon" aria-hidden="true" />
+              <input
+                id="login-password"
+                type={showPass ? 'text' : 'password'}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="input"
+                required
+                autoComplete="current-password"
+                style={{ paddingRight: '3rem' }}
+              />
+              <button
+                type="button"
+                className="input-action"
+                onClick={() => setShowPass(p => !p)}
+                aria-label={showPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+              >
+                <i className={`bi ${showPass ? 'bi-eye-slash' : 'bi-eye'}`} />
+              </button>
+            </div>
           </div>
 
-          <div style={styles.options}>
-            <label style={styles.checkboxLabel}>
-              <input type="checkbox" style={{accentColor: 'var(--color-primary)', width: '16px', height: '16px'}} />
+          {/* Options */}
+          <div style={s.options}>
+            <label className="checkbox-group" htmlFor="login-remember">
+              <input
+                id="login-remember"
+                type="checkbox"
+                checked={remember}
+                onChange={e => setRemember(e.target.checked)}
+              />
               <span>Recordarme</span>
             </label>
-            <a href="#" style={styles.forgotLink}>¿Olvidaste tu clave?</a>
+            <Link to="#" style={s.forgotLink}>¿Olvidaste tu clave?</Link>
           </div>
 
-          <motion.button 
-            whileHover={{ scale: 1.02 }}
+          {/* Submit */}
+          <motion.button
+            type="submit"
+            className="btn btn-primary btn-full"
+            whileHover={{ scale: 1.02, boxShadow: '0 16px 50px rgba(230,25,43,0.4)' }}
             whileTap={{ scale: 0.98 }}
-            type="submit" 
-            className="btn-primary" 
-            style={{width: '100%', marginTop: '1rem', padding: '1.2rem', fontSize: '1.1rem'}}
+            disabled={isLoading}
+            id="login-submit-btn"
+            style={s.submitBtn}
           >
-            ACCEDER
+            {isLoading ? (
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <span className="spinner" style={{ width: 18, height: 18 }} />
+                Ingresando...
+              </span>
+            ) : (
+              <>
+                <i className="bi bi-box-arrow-in-right" />
+                Iniciar Sesión
+              </>
+            )}
           </motion.button>
         </form>
 
-        <div style={styles.footer}>
-          <p style={styles.footerText}>
-            ¿No tienes cuenta? <Link to="/register" style={styles.footerLink}>Regístrate aquí</Link>
-          </p>
+        {/* Divider */}
+        <div style={s.dividerRow}>
+          <div style={s.dividerLine} />
+          <span style={s.dividerText}>o</span>
+          <div style={s.dividerLine} />
         </div>
+
+        {/* Google placeholder */}
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          style={s.googleBtn}
+          id="login-google-btn"
+          type="button"
+          aria-label="Continuar con Google"
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+            <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z" fill="#4285F4"/>
+            <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/>
+            <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z" fill="#FBBC05"/>
+            <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58Z" fill="#EA4335"/>
+          </svg>
+          Continuar con Google
+        </motion.button>
+
+        {/* Footer */}
+        <p style={s.footer}>
+          ¿No tienes cuenta?{' '}
+          <Link to="/register" style={s.footerLink} id="login-register-link">
+            Regístrate gratis
+          </Link>
+        </p>
       </motion.div>
     </motion.div>
   );
 };
 
-const styles = {
+const s = {
   page: {
     minHeight: '100vh',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '8rem 2rem 4rem 2rem',
+    padding: 'calc(var(--navbar-height) + 2rem) 1.5rem 3rem',
     position: 'relative',
-    zIndex: 2
   },
-  glowCircle: {
-    position: 'absolute',
-    width: '400px',
-    height: '400px',
-    background: 'radial-gradient(circle, rgba(230,25,43,0.15) 0%, transparent 70%)',
-    borderRadius: '50%',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    zIndex: -1,
-    filter: 'blur(40px)'
+  bgGlow: {
+    position: 'fixed',
+    inset: 0,
+    background: 'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(230,25,43,0.1) 0%, transparent 65%)',
+    pointerEvents: 'none',
+    zIndex: 0,
   },
-  container: {
+  card: {
     width: '100%',
-    maxWidth: '480px',
-    padding: '3.5rem 3rem',
-    borderRadius: '16px',
-    border: '1px solid rgba(255,255,255,0.08)',
-    boxShadow: '0 20px 40px rgba(0,0,0,0.5)'
+    maxWidth: '440px',
+    padding: '3rem 2.5rem',
+    borderRadius: 'var(--radius-xl)',
+    position: 'relative',
+    zIndex: 1,
+    boxShadow: '0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px var(--border-subtle)',
   },
-  header: {
+  logoWrapper: {
     textAlign: 'center',
-    marginBottom: '3rem',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+    marginBottom: '2rem',
   },
   logo: {
-    height: '70px',
-    objectFit: 'contain',
-    marginBottom: '1.5rem',
-    filter: 'drop-shadow(0 0 8px rgba(230,25,43,0.4))'
+    height: '44px',
+    margin: '0 auto',
+    filter: 'drop-shadow(0 0 10px rgba(230,25,43,0.35))',
+  },
+  heading: {
+    textAlign: 'center',
+    marginBottom: '2rem',
   },
   title: {
-    fontSize: '2.4rem',
-    marginBottom: '0.5rem',
-    letterSpacing: '1px'
+    fontFamily: 'var(--font-display)',
+    fontSize: '2.2rem',
+    letterSpacing: '0.04em',
+    color: 'var(--white)',
+    marginBottom: '0.4rem',
   },
   subtitle: {
-    color: 'var(--color-text-muted)',
-    fontSize: '1rem'
+    fontSize: '0.88rem',
+    color: 'var(--gray-400)',
+  },
+  errorBox: {
+    padding: '0.75rem 1rem',
+    background: 'rgba(230,25,43,0.1)',
+    border: '1px solid rgba(230,25,43,0.3)',
+    borderRadius: 'var(--radius-sm)',
+    color: 'var(--red-400)',
+    fontSize: '0.85rem',
+    marginBottom: '1.5rem',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '1.5rem'
+    gap: '1.2rem',
   },
   options: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '0.5rem',
-    fontSize: '0.9rem',
-    marginTop: '-0.5rem'
-  },
-  checkboxLabel: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.6rem',
-    color: 'var(--color-text-muted)',
-    cursor: 'pointer'
+    fontSize: '0.85rem',
+    marginTop: '-0.2rem',
   },
   forgotLink: {
-    color: 'var(--color-white)',
-    textDecoration: 'none',
-    transition: 'color var(--transition-fast)',
-    borderBottom: '1px solid transparent'
+    fontSize: '0.82rem',
+    color: 'var(--gray-400)',
+    transition: 'color 0.2s ease',
+  },
+  submitBtn: {
+    padding: '1rem',
+    borderRadius: 'var(--radius-sm)',
+    fontSize: '0.82rem',
+    letterSpacing: '0.12em',
+    marginTop: '0.4rem',
+    gap: '0.6rem',
+  },
+  dividerRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1rem',
+    margin: '1.5rem 0',
+  },
+  dividerLine: {
+    flex: 1,
+    height: '1px',
+    background: 'var(--border-subtle)',
+  },
+  dividerText: {
+    fontSize: '0.75rem',
+    color: 'var(--gray-500)',
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase',
+  },
+  googleBtn: {
+    width: '100%',
+    padding: '0.85rem',
+    background: 'rgba(255,255,255,0.05)',
+    border: '1px solid var(--border-default)',
+    borderRadius: 'var(--radius-sm)',
+    color: 'var(--gray-200)',
+    fontSize: '0.85rem',
+    fontWeight: '500',
+    fontFamily: 'var(--font-body)',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '0.75rem',
+    transition: 'background 0.2s ease, border-color 0.2s ease',
+    letterSpacing: '0.02em',
   },
   footer: {
-    marginTop: '2.5rem',
     textAlign: 'center',
-    borderTop: '1px solid rgba(255,255,255,0.08)',
-    paddingTop: '2rem'
-  },
-  footerText: {
-    color: 'var(--color-text-muted)',
-    fontSize: '0.95rem'
+    marginTop: '1.5rem',
+    fontSize: '0.88rem',
+    color: 'var(--gray-400)',
   },
   footerLink: {
-    color: 'var(--color-primary)',
-    fontWeight: '800',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    marginLeft: '0.5rem',
-    textShadow: '0 0 10px rgba(230,25,43,0.3)'
-  }
+    color: 'var(--red-400)',
+    fontWeight: '600',
+    transition: 'color 0.2s ease',
+  },
 };
 
 export default Login;
