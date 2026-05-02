@@ -88,10 +88,41 @@ const Checkout = () => {
   const handleSubmit = useCallback(async function submitOrder(e) {
     e.preventDefault();
     setIsProcessing(true);
+    
+    // Simular tiempo de procesamiento
     await new Promise(r => setTimeout(r, 2000));
+    
+    // Calcular totales
+    const total = getCartTotal();
+    const shipping = total >= 200000 ? 0 : 20000;
+    const grandTotal = total + shipping;
+
+    // Crear el objeto del pedido
+    const newOrder = {
+      id: `ORD-${Date.now().toString().slice(-6)}`, // Genera ej: ORD-123456
+      customer: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      address: `${formData.address}, ${formData.city}`,
+      product: cartItems.length === 1 ? cartItems[0].name : `${cartItems.length} artículos`,
+      items: cartItems, // Guardar detalle para un futuro modal
+      total: grandTotal,
+      status: 'pendiente',
+      date: new Intl.DateTimeFormat('es-CO', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date()),
+      paymentMethod,
+    };
+
+    // Guardar en localStorage
+    try {
+      const existingOrders = JSON.parse(localStorage.getItem('dyl_orders:v1') || '[]');
+      localStorage.setItem('dyl_orders:v1', JSON.stringify([newOrder, ...existingOrders]));
+    } catch (err) {
+      console.error('Error al guardar el pedido:', err);
+    }
+
     setIsProcessing(false);
     setShowSuccess(true);
-  }, []);
+  }, [formData, cartItems, getCartTotal, paymentMethod]);
 
   const handleSuccessClose = useCallback(function closeSuccess() {
     clearCart();
@@ -367,18 +398,18 @@ const s = {
   stepLabelActive: { color: 'var(--white)' },
   stepLine: { width: '50px', height: '1px', background: 'var(--border-default)', transition: 'background 0.3s ease', flexShrink: 0 },
   stepLineDone: { background: 'var(--success)' },
-  content: { display: 'grid', gridTemplateColumns: '1fr 360px', gap: '2.5rem', alignItems: 'start' },
-  formSection: { background: 'var(--bg-elevated)', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-subtle)', padding: '2.5rem' },
+  content: { display: 'flex', flexWrap: 'wrap-reverse', gap: '2.5rem', alignItems: 'flex-start' },
+  formSection: { flex: '1 1 500px', minWidth: 0, background: 'var(--bg-elevated)', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-subtle)', padding: 'clamp(1.5rem, 4vw, 2.5rem)' },
   stepTitle: { fontFamily: 'var(--font-display)', fontSize: '1.6rem', color: 'var(--white)', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.8rem' },
   stepTitleIcon: { color: 'var(--red-500)', fontSize: '1.3rem' },
-  formGrid: { display: 'flex', flexDirection: 'column', gap: '1.2rem' },
-  stepActions: { display: 'flex', gap: '1rem', marginTop: '2rem', justifyContent: 'flex-end' },
+  formGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))', gap: '1.2rem' },
+  stepActions: { display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '2rem', justifyContent: 'flex-end' },
   paymentGrid: { display: 'flex', flexDirection: 'column', gap: '0.8rem', marginBottom: '0.5rem' },
   paymentCard: { display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 1.2rem', background: 'var(--bg-card)', border: '1px solid var(--border-default)', borderRadius: 'var(--radius-md)', cursor: 'pointer', fontFamily: 'var(--font-body)', transition: 'all 0.25s ease', textAlign: 'left', position: 'relative' },
   paymentCardActive: { border: '1px solid var(--border-accent)', background: 'rgba(230,25,43,0.06)', boxShadow: '0 0 0 1px var(--red-500)' },
   paymentLabel: { fontSize: '0.9rem', fontWeight: '500', flex: 1, transition: 'color 0.2s ease' },
   payCheck: { position: 'absolute', right: '1rem', width: '22px', height: '22px', borderRadius: '50%', background: 'var(--red-500)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: '700' },
-  summary: { background: 'var(--bg-elevated)', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-subtle)', padding: '2rem', position: 'sticky', top: 'calc(var(--navbar-height) + 1rem)' },
+  summary: { flex: '1 1 320px', minWidth: 0, background: 'var(--bg-elevated)', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-subtle)', padding: 'clamp(1.5rem, 4vw, 2rem)', position: 'sticky', top: 'calc(var(--navbar-height) + 1rem)' },
   summaryTitle: { fontFamily: 'var(--font-display)', fontSize: '1.4rem', color: 'var(--white)', marginBottom: '1.5rem' },
   summaryItems: { display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' },
   summaryItem: { display: 'flex', alignItems: 'center', gap: '0.8rem' },

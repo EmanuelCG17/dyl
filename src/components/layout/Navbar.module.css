@@ -236,6 +236,41 @@
   border-top: 1px solid var(--border-subtle);
 }
 
+/* Container queries para navbar responsive */
+@container (max-width: 480px) {
+  .container { padding: 0 var(--space-4); }
+  .logo { height: 36px; }
+  .actions { gap: var(--space-3); }
+}
+
+/* Fluid typography responsive */
+@media (max-width: 640px) {
+  .link { font-size: 0.75rem; }
+  .authLink { font-size: 0.75rem; }
+  .registerLink { font-size: 0.65rem; padding: 0.35rem 0.65rem; }
+  .cartBtn { font-size: 1.2rem; }
+}
+
+@media (max-width: 480px) {
+  .logo { height: 32px; }
+  .container { gap: var(--space-3); }
+  .mobileLink { font-size: 1.5rem; }
+}
+
+/* Grid responsive para el menú móvil */
+@media (max-width: 640px) {
+  .mobileMenuInner { gap: var(--space-2); }
+  .mobileLink { padding: var(--space-3) 0; }
+}
+
+/* Asegurar que el menú móvil tenga scroll si es necesario */
+@media (max-height: 500px) {
+  .mobileMenu {
+    max-height: 100svh;
+    overflow-y: auto;
+  }
+}
+
 .mobileMenuInner {
   padding: var(--space-5) var(--space-8) var(--space-6);
   display: flex;
